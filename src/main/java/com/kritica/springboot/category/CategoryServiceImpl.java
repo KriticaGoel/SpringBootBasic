@@ -36,4 +36,17 @@ public class CategoryServiceImpl implements  CategoryService {
             return "Category deleted successfully";
         }
 
+    @Override
+    public String updateCategory(int id, Category updatedCategory) {
+        Category category = categories.stream().filter(c->c.getId()==id).findFirst().orElse(null);
+        if(category==null){
+            createCategory(updatedCategory);
+            return "Category created successfully";
+        }
+        else{
+            category.setCategoryName(updatedCategory.getCategoryName());
+            return "Category updated successfully";
+        }
+    }
+
 }
