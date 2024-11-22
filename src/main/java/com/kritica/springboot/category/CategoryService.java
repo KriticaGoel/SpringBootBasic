@@ -10,7 +10,7 @@ import java.util.List;
 public interface CategoryService {
 
 
-    public CategoryResponse getCategories(Integer pageNumber,Integer pageSize);
+    public CategoryResponse getCategories(Integer pageNumber,Integer pageSize,String sortBy,String sortOrder);
 
     public String createCategory(CategoryDTO category);
 
