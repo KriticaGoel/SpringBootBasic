@@ -26,14 +26,19 @@ public class GlobalException {
     }
 
     @ExceptionHandler(ResourcesNotFound.class)
-    public ResponseEntity<String>  resourceNotFound(ResourcesNotFound e){
-
-        return new ResponseEntity<String>(e.getMessage(),HttpStatus.NOT_FOUND);
+    public ResponseEntity<APIResponse>  resourceNotFound(ResourcesNotFound e){
+        APIResponse apiResponse= new APIResponse();
+        apiResponse.setMessage(e.getMessage());
+        apiResponse.setStatus(false);
+        return new ResponseEntity<APIResponse>(apiResponse,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(APIException.class)
-    public ResponseEntity<String> apiException(APIException e){
-        return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_GATEWAY);
+    public ResponseEntity<APIResponse> apiException(APIException e){
+        APIResponse apiResponse= new APIResponse();
+        apiResponse.setMessage(e.getMessage());
+        apiResponse.setStatus(false);
+        return new ResponseEntity<APIResponse>(apiResponse,HttpStatus.BAD_GATEWAY);
 
     }
 }
