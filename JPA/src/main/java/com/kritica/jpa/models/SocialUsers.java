@@ -2,6 +2,9 @@ package com.kritica.jpa.models;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 public class SocialUsers {
@@ -17,5 +20,8 @@ public class SocialUsers {
     //mappedBy should be the same as field name in SocialProfile class
     @OneToOne(mappedBy = "socialUser")
     private SocialProfile socialProfile;
+
+    @OneToMany(mappedBy = "socialUser")
+    private List<Post> posts= new ArrayList<Post>();
 
 }

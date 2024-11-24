@@ -1,8 +1,13 @@
 1. SocialUser and SocialProfile class
+   
+Database changes
+```
    SocialUser
    Columns - user_id(pk),username,password
    SocialProfile
    Columns - profile_id(pk),name,age
+```
+SocialUsers class
 ```java
 @Entity
 public class SocialUsers {
@@ -17,6 +22,7 @@ public class SocialUsers {
 
 }
 ```
+SocialProfile class
 ```java
 @Entity
 public class SocialProfile {
@@ -29,6 +35,7 @@ public class SocialProfile {
 }
 ```
 2. SocialUser and SocialProfile has one to one mapping 
+
 Database changes
 ```
 SocialUser 
@@ -55,6 +62,40 @@ Added code in SocialProfile
     private SocialUsers socialUser;
 ```
 2. SocialUser and Post have one to many mapping
+
+Annotation
+```
 @OneToMany
 @ManyToOne
-3. adsd
+```
+Database changes
+```
+SocialUser 
+    Columns - user_id(pk)
+Post
+    Columns - post_id(pk),user_id(FK-SocialUser),post
+```
+Added data in SocialUser class to tell SocialUser about multiple data of post
+```java
+@OneToMany(mappedBy = "socialUser")
+    private List<Post> posts= new ArrayList<Post>();
+```
+Create new column in post class which is a foreign key of social user class.
+```java
+@Entity
+public class Post {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long postId;
+
+    @ManyToOne
+    @JoinColumn(name = "social_user_id")
+    private SocialUsers socialUser;
+    
+    private String post;
+
+   
+}
+```
+3. Many-to-Many mapping
