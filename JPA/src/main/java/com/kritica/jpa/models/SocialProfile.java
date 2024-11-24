@@ -6,10 +6,14 @@ import jakarta.persistence.*;
 public class SocialProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long profileId;
+    private Long id;
 
-    @OneToOne(mappedBy = "socialProfile")
-    //@JoinColumn(name = "social_users_id")
-    private SocialUsers socialUsers;
+    private String name;
+    private int age;
 
+    //this will create foreign key of social user class in SocialProfile table
+    @OneToOne
+    @JoinColumn(name="social_user_id")
+    private SocialUsers socialUser;
+   
 }

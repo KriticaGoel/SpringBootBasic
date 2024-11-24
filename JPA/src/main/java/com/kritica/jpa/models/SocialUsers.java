@@ -2,14 +2,20 @@ package com.kritica.jpa.models;
 
 import jakarta.persistence.*;
 
+
 @Entity
 public class SocialUsers {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long user_id;
 
-    //mapped by is used to tell social user class that there is a one to one mapping
-    @OneToOne
-    @JoinColumn(name="social_Profile")
-    private SocialProfile   socialProfile;
+    private String username;
+    private String password;
+
+    //Tell SocialUsers class that there is one to one mapping with SocialProfile class.
+    //mappedBy should be the same as field name in SocialProfile class
+    @OneToOne(mappedBy = "socialUser")
+    private SocialProfile socialProfile;
+
 }
