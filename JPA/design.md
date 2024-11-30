@@ -34,7 +34,7 @@ public class SocialProfile {
     private int age;
 }
 ```
-2. SocialUser and SocialProfile has one to one mapping 
+2. SocialUser and SocialProfile have one-to-one mapping 
 
 Database changes
 ```
@@ -99,3 +99,6 @@ public class Post {
 }
 ```
 3. Many-to-Many mapping
+One use can join multiple groups and one group can be joined by multiple users.
+In a group, users are unique—that means one use can join one group max once; but he/she is eligible to join another group too.
+In user groups should be unique 
