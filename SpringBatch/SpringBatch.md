@@ -76,4 +76,108 @@ public class JobCompletionNotificationImpl implements JobExecutionListener {
                 .build();
     }
 ```
-10. Processor
+10. Processor - process the dat before write
+```java
+@Bean
+    public ItemProcessor<Product, Product> processor(){
+        return new CustomItemProcessor();
+    }
+```
+
+```java
+public class CustomItemProcessor implements ItemProcessor<Product, Product> {
+    @Override
+    public Product process(Product item)  {
+        try {
+            int discountper = Integer.parseInt(item.getDiscount().trim());
+            Double price = Double.parseDouble(item.getPrice().trim());
+            Double finalPrice = price - (price * (discountper / 100));
+            item.setFinalPrice(String.valueOf(finalPrice));
+            return item;
+        }catch(NumberFormatException e) {
+            System.out.println(e.getMessage());
+        }
+        return item;
+    }
+}
+```
+11. writer- Write data in db
+```java
+@Bean
+    public ItemWriter<Product> writer(DataSource dataSource){
+        return new JdbcBatchItemWriterBuilder<Product>()
+                .sql("insert into products(product_id,title,description,price,discount,final_price)" +
+                        "value(:productId,:title,:description,:price,:discount,:finalPrice)")
+                .dataSource(dataSource)
+                .beanMapped()
+                .build();
+
+
+    }
+```
+
+Final BatchConfig
+```java
+@Configuration
+public class BatchConfig {
+
+    @Bean
+    public Job jobBean(JobRepository jobRepository,
+                       JobCompletionNotificationImpl listener,
+                       Step steps){
+        return new JobBuilder("FirstJob",jobRepository)
+                .listener(listener)
+                .start(steps)
+                .build();
+    }
+
+
+    @Bean
+    public Step steps(
+            JobRepository jobRepository,
+            DataSourceTransactionManager transactionManager,
+            ItemReader<Product> reader,
+            ItemProcessor<Product,Product> processor,
+            ItemWriter<Product> writer
+            ){
+        return new StepBuilder("Step1",jobRepository)
+                .<Product,Product>chunk(5,transactionManager)
+                .reader(reader)
+                .processor(processor)
+                .writer(writer)
+                .build();
+
+    }
+
+    //reader
+    @Bean
+    public FlatFileItemReader<Product> reader(){
+        return new FlatFileItemReaderBuilder<Product>()
+                .name("itemReader")
+                .resource(new ClassPathResource("data.csv"))
+                .delimited()
+                .names("productId","title","description","price","discount")
+                .targetType(Product.class)
+                .build();
+    }
+
+
+    //Processor
+    @Bean
+    public ItemProcessor<Product, Product> processor(){
+        return new CustomItemProcessor();
+    }
+
+    //writter
+    @Bean
+    public ItemWriter<Product> writer(DataSource dataSource){
+        return new JdbcBatchItemWriterBuilder<Product>()
+                .sql("insert into products(product_id,title,description,price,discount,final_price)" +
+                        "value(:productId,:title,:description,:price,:discount,:finalPrice)")
+                .dataSource(dataSource)
+                .beanMapped()
+                .build();
+
+
+    }
+```

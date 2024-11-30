@@ -1,14 +1,14 @@
 package com.kritica.springbatch.model;
 
 public class Product {
-    private int productId;
+    private String productId;
     private String title;
     private String description;
     private String price;
     private String discount;
-    private String discountedPrice;
+    private String finalPrice;
 
-    public Product(int productId, String title, String description, String price, String discount) {
+    public Product(String productId, String title, String description, String price, String discount) {
         this.productId = productId;
         this.title = title;
         this.description = description;
@@ -19,11 +19,11 @@ public class Product {
     public Product() {
     }
 
-    public int getProductId() {
+    public String getProductId() {
         return productId;
     }
 
-    public void setProductId(int productId) {
+    public void setProductId(String productId) {
         this.productId = productId;
     }
 
@@ -58,11 +58,12 @@ public class Product {
     public void setDiscount(String discount) {
         this.discount = discount;
     }
-    public String getDiscountedPrice() {
-        return discountedPrice;
+
+    public String getFinalPrice() {
+        return finalPrice;
     }
 
-    public void setDiscountedPrice(String discountedPrice) {
-        this.discountedPrice = discountedPrice;
+    public void setFinalPrice(String finalPrice) {
+        this.finalPrice = finalPrice;
     }
 }
